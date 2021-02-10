@@ -1,0 +1,30 @@
+{
+  "name": "fcc-scatterplot",
+  "version": "1.0.0",
+  "description": "Scatterplot with D3",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "server": "node ./src/server/index.js",
+    "server:watch": "nodemon --watch ./src/server ./src/server/index.js",
+    "client": "node ./config.esbuild.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NikIvan/fcc-barchart.git"
+  },
+  "keywords": [
+    "D3"
+  ],
+  "author": "NikIvan",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/NikIvan/fcc-barchart/issues"
+  },
+  "homepage": "https://github.com/NikIvan/fcc-barchart#readme",
+  "dependencies": {},
+  "devDependencies": {
+    "d3": "^6.5.0",
+    "esbuild": "^0.8.40"
+  }
+}
