@@ -7,4 +7,7 @@ Scatterplot with D3
 
 `npm run client` to generate client code
 
+TODO:
 
+- fix commit hooks
+- add legend to graph
