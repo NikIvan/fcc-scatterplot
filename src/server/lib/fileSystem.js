@@ -2,6 +2,7 @@ const fs = require('fs');
 const util = require('util');
 const path = require('path');
 const childProcess = require('child_process');
+
 const execFile = util.promisify(childProcess.execFile);
 const config = require('../config/config');
 
@@ -17,7 +18,7 @@ async function readFile(pathToFile) {
   } else if (pathToFile.endsWith('.css')) {
     mimetype = 'text/css';
   } else {
-    getMimetypeResult = await execFile('file', ['-b','--mime-type', pathToFile]);
+    getMimetypeResult = await execFile('file', ['-b', '--mime-type', pathToFile]);
 
     if (getMimetypeResult) {
       mimetype = getMimetypeResult.stdout.replace(/\n/, '');
@@ -27,7 +28,7 @@ async function readFile(pathToFile) {
   try {
     stats = await fs.promises.stat(pathToFile);
   } catch (err) {
-    console.dir({err});
+    console.dir({ err });
     if (err.code === 'ENOENT') {
       console.log('Cannot find requested file');
     } else {
@@ -48,7 +49,7 @@ async function readFile(pathToFile) {
 
 async function findStaticFile(input) {
   const safeSuffix = path.normalize(input).replace(/^(\.\.(\/|\\|$))+/, '');
-  let pathToFile = path.join(config.publicFolder, safeSuffix);
+  const pathToFile = path.join(config.publicFolder, safeSuffix);
   let stats = null;
 
   try {
@@ -67,9 +68,11 @@ async function findStaticFile(input) {
       stats,
     };
   }
+
+  return null;
 }
 
 module.exports = {
   readFile,
   findStaticFile,
-}
+};

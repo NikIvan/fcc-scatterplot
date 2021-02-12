@@ -1,15 +1,4 @@
-
 class HttpRouter {
-  static METHOD_GET = 'GET'
-  static METHOD_POST = 'POST'
-  static METHOD_PUT = 'PUT'
-  static METHOD_PATCH = 'PATCH'
-  static METHOD_DELETE = 'DELETE'
-  static METHOD_OPTIONS = 'OPTIONS'
-  static METHOD_HEAD = 'HEAD'
-  static METHOD_CONNECT = 'CONNECT'
-  static METHOD_TRACE = 'TRACE'
-
   constructor() {
     this.routes = {};
 
@@ -18,7 +7,7 @@ class HttpRouter {
   }
 
   set(path = '', options = {}, handler) {
-    const {method, isExact = false} = options;
+    const { method, isExact = false } = options;
 
     if (method == null) {
       throw new Error('Please, provide route method!');
@@ -61,16 +50,27 @@ class HttpRouter {
     if (matchedRoutes.exact.has(path)) {
       matchedHandler = matchedRoutes.exact.get(path);
     } else {
-      for (const [route, handler] of matchedRoutes.regex) {
-        if ((new RegExp(route)).test(path)) {
-          matchedHandler = handler;
-          break;
-        }
+      const matchedRoute = Object
+        .keys(matchedRoutes.regex)
+        .find((route) => new RegExp(route).test(path));
+
+      if (matchedRoute) {
+        matchedHandler = matchedRoutes.get(matchedRoute);
       }
     }
 
     return matchedHandler;
   }
 }
+
+HttpRouter.METHOD_GET = 'GET';
+HttpRouter.METHOD_POST = 'POST';
+HttpRouter.METHOD_PUT = 'PUT';
+HttpRouter.METHOD_PATCH = 'PATCH';
+HttpRouter.METHOD_DELETE = 'DELETE';
+HttpRouter.METHOD_OPTIONS = 'OPTIONS';
+HttpRouter.METHOD_HEAD = 'HEAD';
+HttpRouter.METHOD_CONNECT = 'CONNECT';
+HttpRouter.METHOD_TRACE = 'TRACE';
 
 module.exports = HttpRouter;
