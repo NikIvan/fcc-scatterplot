@@ -10,8 +10,7 @@
     "client": "node ./config.esbuild.js",
     "validate": "./node_modules/.bin/eslint ./src/** --fix",
     "precommit": "npm run validate",
-    "prepush": "npm run validate",
-    "postinstall": "husky install"
+    "prepush": "npm run validate"
   },
   "repository": {
     "type": "git",
