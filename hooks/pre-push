@@ -1,2 +1,2 @@
 #!/bin/sh
-npm run validat
+npm run validate
