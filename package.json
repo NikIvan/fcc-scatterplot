@@ -9,8 +9,7 @@
     "server:watch": "nodemon --watch ./src/server ./src/server/index.js",
     "client": "node ./config.esbuild.js",
     "validate": "./node_modules/.bin/eslint ./src/** --fix",
-    "precommit": "npm run validate",
-    "prepush": "npm run validate"
+    "postinstall": "cp ./hooks/* ./.git/hooks"
   },
   "repository": {
     "type": "git",
