@@ -10,6 +10,9 @@ const height = 300;
 const padding = 50;
 const radius = 5;
 
+const getColor = d3.scaleOrdinal(d3.schemeCategory10);
+const legendRectSize = 18;
+
 async function app() {
   const svg = d3.select('#chart')
     .append('svg')
@@ -34,20 +37,8 @@ async function app() {
     return newEl;
   });
 
-  console.dir({ cyclistData });
-
   d3.select('#title')
     .text('Doping in Professional Bicycle Racing');
-
-  // d3.select('#description')
-  //   .html(gdpData.description.replace(/\n/gi, '<br />'))
-  //
-  // const [gdpDates, gdpValues] = gdpData.data.reduce((acc, el) => {
-  //   acc[0].push(new Date(el[0]));
-  //   acc[1].push(el[1]);
-  //   return acc;
-  // }, [[], []]);
-  // const barWidth = width / gdpData.data.length;
 
   const maxYear = d3.max(cyclistData, (d) => d.Year + 1);
   const minYear = d3.min(cyclistData, (d) => d.Year - 1);
@@ -66,24 +57,17 @@ async function app() {
 
   const timeFormat = d3.timeFormat('%M:%S');
   const yAxis = d3.axisLeft().scale(yScale).tickFormat(timeFormat);
-  // const yAxisScale = '';
-  //
-  // console.dir({maxValue, gdpData, minDate, maxDate});
-  //
-  // console.dir(xScale(3));
-  // console.dir(xScale(new Date()));
-  // console.dir(d3.max(gdpDates));
-  //
+
   svg.append('g')
     .call(xAxis)
     .attr('id', 'x-axis')
     .attr('transform', `translate(${padding}, ${height + padding})`);
-  //
+
   svg.append('g')
     .call(yAxis)
     .attr('id', 'y-axis')
     .attr('transform', `translate(${padding}, ${padding})`);
-  //
+
   svg.append('g')
     .selectAll('circle')
     .data(cyclistData)
@@ -96,12 +80,12 @@ async function app() {
     .attr('cx', (d) => padding + xScale(d.Year))
     .attr('cy', (d) => padding + yScale(d.dateTime))
     .attr('r', radius)
+    .style('fill', (d) => getColor(d.Doping === ''))
     .on('mouseover', (event) => {
       const year = event.target.getAttribute('data-xvalue');
       const index = event.target.getAttribute('data-index');
       const el = cyclistData[index];
 
-      console.dir({ event, el });
       let html = `Name: ${el.Name} [${el.Nationality}]<br />Year: ${year}<br />Time: ${el.Time}<br />`;
 
       if (el.Doping) {
@@ -117,5 +101,34 @@ async function app() {
     })
     .on('mouseout', () => {
       tooltip.style('visibility', 'hidden');
+    });
+
+  const legendContainer = svg.append('g');
+
+  const legend = legendContainer
+    .attr('id', 'legend')
+    .selectAll('#legend')
+    .data(getColor.domain())
+    .enter()
+    .append('g')
+    .attr('transform', (d, i) => `translate(0, ${height / 2 - i * legendRectSize})`);
+
+  legend.append('rect')
+    .attr('x', padding + width - legendRectSize)
+    .attr('height', legendRectSize)
+    .attr('width', legendRectSize)
+    .style('fill', getColor);
+
+  legend.append('text')
+    .attr('x', padding + width - legendRectSize - 5)
+    .attr('y', 9)
+    .attr('dy', '.35em')
+    .style('text-anchor', 'end')
+    .text((d) => {
+      if (d) {
+        return 'Riders with doping allegations';
+      }
+
+      return 'No doping allegations';
     });
 }
