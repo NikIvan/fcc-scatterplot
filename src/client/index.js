@@ -126,9 +126,9 @@ async function app() {
     .style('text-anchor', 'end')
     .text((d) => {
       if (d) {
-        return 'Riders with doping allegations';
+        return 'No doping allegations';
       }
 
-      return 'No doping allegations';
+      return 'Riders with doping allegations';
     });
 }
