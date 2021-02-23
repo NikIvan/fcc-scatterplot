@@ -50,12 +50,11 @@ class HttpRouter {
     if (matchedRoutes.exact.has(path)) {
       matchedHandler = matchedRoutes.exact.get(path);
     } else {
-      const matchedRoute = Object
-        .keys(matchedRoutes.regex)
-        .find((route) => new RegExp(route).test(path));
-
-      if (matchedRoute) {
-        matchedHandler = matchedRoutes.get(matchedRoute);
+      for (const [route, handler] of matchedRoutes.regex) {
+        if (new RegExp(route).test(path)) {
+          matchedHandler = handler;
+          break;
+        }
       }
     }
 
